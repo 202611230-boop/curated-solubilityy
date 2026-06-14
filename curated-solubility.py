@@ -95,7 +95,7 @@ if submit_button:
     }
 
     # 결과 화면 출력
-    st.success("✅ 가상 AI 엔진 예측 완료!")
+    st.success("✅예측 완료!")
     st.subheader("📊 예측 결과")
     
     c1, c2 = st.columns(2)

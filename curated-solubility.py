@@ -65,7 +65,26 @@ st.divider()
 # 6. 예측 버튼 및 결과 출력
 if st.button("🔮 수용성 등급 예측하기", type="primary"):
     
-    # 입력 데이터를 DataFrame 형태로 변환
+    # [수정 포인트]: 변수명을 feature_cols_new로 변경하고 괄호를 정확히 닫아줌
     input_data = pd.DataFrame(
         [[mw, hd, ha, tpsa, nrb, logp, high_logp, hbond_total, high_mw]],
-        columns=feature_cols
+        columns=feature_cols_new
+    )
+    
+    # 7. 데이터 전처리 및 예측 진행 (추가된 기능)
+    try:
+        # 학습할 때 사용한 스케일러로 데이터 변환
+        input_scaled = scaler.transform(input_data)
+        
+        # 모델 예측 값 추출 (예: 'G1', 'G2' 등)
+        prediction = rf_model.predict(input_scaled)[0]
+        
+        # 결과 화면에 출력
+        st.success(f"### 🎉 예측 결과: **{prediction}**")
+        if prediction in class_desc:
+            st.info(f"💡 **등급 설명:** {class_desc[prediction]}")
+        else:
+            st.warning("정의되지 않은 등급 결과가 반환되었습니다.")
+            
+    except Exception as e:
+        st.error(f"예측 과정 중 오류가 발생했습니다: {e}")
